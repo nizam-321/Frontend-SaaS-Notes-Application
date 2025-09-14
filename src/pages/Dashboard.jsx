@@ -1,60 +1,4 @@
-//path: frontend/src/pages/Dashboard.jsx
-// import { useEffect, useState } from 'react';
-// import { useTenant } from '../context/TenantContext';
-// import NoteForm from '../components/NoteForm';
-// import NoteList from '../components/NoteList';
-
-// export default function Dashboard() {
-//   const [notes, setNotes] = useState([]);
-//   const [error, setError] = useState('');
-//   const token = localStorage.getItem('token');
-//   const { setTenantPlan, setNoteLimitReached } = useTenant();
-
-//   useEffect(() => {
-//     if (!token) {
-//       setError('No token found. Please login.');
-//       return;
-//     }
-
-//     fetch('http://localhost:5000/api/notes', {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     })
-//       .then((res) => res.json())
-//       .then((data) => {
-//         if (data.message) {
-//           setError(data.message);
-//         } else {
-//           setNotes(data.notes || []);
-//           const plan = data.tenant?.plan || 'free';
-//           setTenantPlan(plan);
-//           if (plan === 'free' && data.notes.length >= 3) {
-//             setNoteLimitReached(true);
-//           }
-//         }
-//       })
-//       .catch(() => setError('Failed to fetch notes'));
-//   }, []);
-
-//   const handleNoteCreated = (newNote) => {
-//     setNotes((prev) => [...prev, newNote]);
-//   };
-
-//   return (
-//     <div className="p-6 max-w-2xl mx-auto">
-//       <h1 className="text-2xl font-bold mb-2">Your Notes</h1>
-//       <NoteForm token={token} onNoteCreated={handleNoteCreated} />
-//       {error && <p className="text-red-500 mb-4">{error}</p>}
-//       <NoteList notes={notes} />
-//     </div>
-//   );
-// }
-
-
-
-// //path: frontend/src/pages/Dashboard.jsx
-// ✅ Correct imports
+// path: frontend/src/pages/Dashboard.jsx
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useTenant } from '../context/TenantContext';
@@ -82,6 +26,8 @@ export default function Dashboard() {
   const [userRole, setUserRole] = useState('');
   const [tenantSlug, setTenantSlug] = useState('');
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     if (!token) {
       setError('No token found. Please login.');
@@ -94,8 +40,7 @@ export default function Dashboard() {
       setUserRole(decoded.role);
       setTenantSlug(decoded.tenantSlug);
 
-      // ✅ Fetch notes from backend
-      fetch('http://localhost:5000/api/notes', {
+      fetch(`${BASE_URL}/api/notes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -111,7 +56,6 @@ export default function Dashboard() {
             setTenantPlan(plan);
             setTenantName(name);
 
-            // ✅ Note limit logic
             if (plan === 'free' && data.notes.length >= 3) {
               setNoteLimitReached(true);
             } else {
@@ -132,7 +76,7 @@ export default function Dashboard() {
 
   const handleDeleteNote = async (noteId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/notes/${noteId}`, {
+      const res = await fetch(`${BASE_URL}/api/notes/${noteId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -148,15 +92,12 @@ export default function Dashboard() {
 
   const handleUpgrade = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/tenants/${tenantSlug}/upgrade`, // ✅ fixed URL
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${BASE_URL}/api/tenants/${tenantSlug}/upgrade`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
       if (res.ok) {
         setTenantPlan('pro');
@@ -180,7 +121,7 @@ export default function Dashboard() {
           <NoteForm token={token} onNoteCreated={handleNoteCreated} />
         )}
 
-        {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <NoteList notes={notes} onDelete={handleDeleteNote} />
 
