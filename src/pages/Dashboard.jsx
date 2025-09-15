@@ -121,8 +121,6 @@ export default function Dashboard() {
           <NoteForm token={token} onNoteCreated={handleNoteCreated} />
         )}
 
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-
         <NoteList notes={notes} onDelete={handleDeleteNote} />
 
         {noteLimitReached && (

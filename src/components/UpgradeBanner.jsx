@@ -11,7 +11,7 @@ export default function UpgradeBanner({ onUpgrade, userRole }) {
         <strong>Upgrade to Pro</strong> for unlimited notes.
       </p>
 
-      {userRole === 'ADMIN' && (
+      {userRole === 'admin' && (
         <button
           onClick={onUpgrade}
           className="mt-3 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
