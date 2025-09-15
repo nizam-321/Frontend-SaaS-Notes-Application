@@ -7,7 +7,7 @@ export default function UserInfo({ userEmail }) {
   return (
     <section className="px-6 py-4 text-sm text-gray-700">
       <p>Welcome, <strong>{userEmail}</strong></p>
-      <p>Plan: <strong>{tenantPlan}</strong> | Tenant: <strong>{tenantName}</strong></p>
+      <p>Plan: <strong>{tenantPlan}</strong> | Tenant: <strong>{tenantName || userEmail}</strong></p>
     </section>
   );
 }
