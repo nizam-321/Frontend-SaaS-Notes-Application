@@ -52,7 +52,7 @@ export default function Dashboard() {
           } else {
             setNotes(data.notes || []);
             const plan = data.tenant?.plan || 'free';
-            const name = data.tenant?.name || decoded.tenantSlug;
+            const name = data.tenant?.name || decoded.email;
             setTenantPlan(plan);
             setTenantName(name);
 
