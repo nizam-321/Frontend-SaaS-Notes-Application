@@ -40,7 +40,7 @@ export default function Dashboard() {
       setUserRole(decoded.role);
       setTenantSlug(decoded.tenantSlug);
 
-      fetch(`${BASE_URL}/api/notes`, {
+      fetch(`${VITE_API_BASE_URL}/api/notes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -76,7 +76,7 @@ export default function Dashboard() {
 
   const handleDeleteNote = async (noteId) => {
     try {
-      const res = await fetch(`${BASE_URL}/api/notes/${noteId}`, {
+      const res = await fetch(`${VITE_API_BASE_URL}/api/notes/${noteId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ export default function Dashboard() {
 
   const handleUpgrade = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/tenants/${tenantSlug}/upgrade`, {
+      const res = await fetch(`${VITE_API_BASE_URL}/api/tenants/${tenantSlug}/upgrade`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
